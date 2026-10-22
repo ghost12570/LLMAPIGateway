@@ -1,0 +1,18 @@
+{
+  "name": "llm-api-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "企业级高并发 LLM API Gateway — OpenAI 兼容统一中转平台",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "demo": "node scripts/demo.js",
+    "mock": "node scripts/mock-upstream.js",
+    "loadtest": "node scripts/loadtest.js",
+    "test": "node --test --test-concurrency=1 test/gateway.test.js"
+  }
+}

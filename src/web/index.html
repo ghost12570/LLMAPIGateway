@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080c16">
+  <title>LLM Gateway</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237c5cff'/%3E%3Cpath d='M9 21.5 16 9l7 12.5h-3.4L16 15.7l-3.6 5.8H9Z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div id="app">
+    <div class="boot-screen">
+      <div class="boot-mark">
+        <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><rect width="32" height="32" rx="9" fill="url(#bg)"/><defs><linearGradient id="bg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#8b5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><path d="M9 22 16 9l7 13h-3.6L16 15.4 12.6 22H9Z" fill="#fff"/></svg>
+      </div>
+      <div class="boot-text">正在加载 LLM Gateway…</div>
+    </div>
+  </div>
+  <div id="toast-root" class="toast-root"></div>
+  <div id="modal-root"></div>
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>
