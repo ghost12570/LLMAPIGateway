@@ -29,6 +29,7 @@
 - [配置参考](#配置参考)
 - [项目结构](#项目结构)
 - [与 PRD 的覆盖关系与已知边界](#与-prd-的覆盖关系与已知边界)
+- [需求规格说明书（PRD）](docs/PRD.md)
 
 ---
 
@@ -589,6 +590,9 @@ LLMGateway/
 ├── test/
 │   ├── helpers.js
 │   └── gateway.test.js          # 23 项端到端测试
+├── docs/
+│   ├── PRD.md                   # 原始需求规格说明书（Baseline v1.0.0）
+│   └── screenshots/             # 管理后台 / 门户 / Playground 截图
 ├── Dockerfile
 ├── docker-compose.yml
 └── .env.example
@@ -597,6 +601,8 @@ LLMGateway/
 ---
 
 ## 与 PRD 的覆盖关系与已知边界
+
+原始需求文档已归档至 [docs/PRD.md](docs/PRD.md)（《企业级高并发 LLM API Gateway 需求规格说明书（PRD v1）》，v1.0.0 Baseline，2026-10-21）。
 
 ### 已覆盖
 
