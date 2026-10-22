@@ -380,12 +380,27 @@ export async function createApp({ dbPath } = {}) {
   async function close() {
     clearInterval(retentionTimer);
     health.stop();
-    logStore.close();
+    const drainStart = Date.now();
     await new Promise((resolve) => {
-      server.close(() => resolve());
-      server.closeAllConnections?.();
-      setTimeout(resolve, 1500).unref?.();
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        clearInterval(watch);
+        server.closeAllConnections?.();
+        resolve();
+      };
+      const watch = setInterval(() => {
+        if (app.activeRequests <= 0) finish();
+        else if (Date.now() - drainStart > 5000) finish();
+      }, 100);
+      watch.unref?.();
+      server.close(() => finish());
+      setTimeout(finish, 6000).unref?.();
     });
+    // Allow handlers that just finished their response to flush settlement/logs.
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    logStore.close();
     db.close();
   }
 

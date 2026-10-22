@@ -277,7 +277,7 @@ async function portalKeys(el, ctx) {
               <label class="switch sm ${k.status === 'active' ? 'on' : ''} ${k.status === 'revoked' ? 'disabled' : ''}" data-key-toggle="${k.id}" title="${k.status === 'active' ? '停用' : '启用'}"></label>
             </div>
             <div class="key-limits">
-              <div>本月消费<br/><b>${ui.usd(spent)} ${limit ? `/ ${ui.usd(limit)}` : ''}</b></div>
+              <div>本月消费<br/><b>${ui.usd(spent)} ${limit ? `/ ${ui.usd(limit)}` : ''}</b>${Number(k.total_limit_usd) > 0 ? `<div class="text-xs muted-2">累计 ${ui.usd(k.total_spent_usd)} / ${ui.usd(k.total_limit_usd)}</div>` : ''}</div>
               <div>速率限制<br/><b>${k.qps_limit || '默认'} QPS · ${k.tpm_limit ? ui.compact(k.tpm_limit) : '默认'} TPM</b></div>
               <div>授权模型<br/><b>${k.allowed_models?.length ? `${k.allowed_models.length} 个` : '全部模型'}</b></div>
               <div>最近使用<br/><b>${k.last_request_at ? ui.timeAgo(k.last_request_at) : '从未'}</b></div>

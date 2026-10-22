@@ -411,7 +411,7 @@ cost = (prompt_tokens / 1000 × input_price
 - **会话**：HMAC-SHA256 JWT，HttpOnly + SameSite=Lax Cookie，默认 12 小时；SSO 状态 10 分钟过期。
 - **CSRF**：所有管理/门户写操作校验 Origin；SSO 使用随机 state + PKCE（OIDC/OAuth2）+ nonce 校验。
 - **RBAC**：`SUPER_ADMIN` / `ORG_ADMIN` / `APP_USER` / `AUDITOR`；部门管理员只能操作本组织子树，审计员只读。
-- **Prompt 隐私**：请求日志仅保存 RequestID、用户、Key、模型、渠道、耗时、Tokens、成本、状态码与错误；**不保存 Prompt / 生成内容**。
+- **Prompt 隐私**：请求日志仅保存 RequestID、用户、Key、模型、渠道、耗时、Tokens、成本、状态码与截断的错误摘要；**不保存完整 Prompt / 生成内容**。上游错误消息可能包含被拒绝输入的片段，最多保留 500 字符。
 - **响应头**：CSP、`X-Frame-Options: DENY`、`nosniff`、无引用来源；SSE 设置 `X-Accel-Buffering: no`。
 - **Metrics**：默认仅本机可访问；设置 `METRICS_USER` / `METRICS_PASSWORD` 后启用 Basic Auth。
 
@@ -516,6 +516,8 @@ npm test
 
 测试覆盖：
 
+> 使用官方 OpenAI Node SDK **v7.41.0** 实测通过：`models.list`、非流式 chat、SSE 流式 chat（含 usage）、embeddings、401 错误结构，均无需修改 SDK。
+
 1. 健康检查与 Bearer 鉴权
 2. 渠道加密存储、管理概览
 3. `/v1/models` 过滤与元数据
@@ -615,6 +617,8 @@ LLMGateway/
 6. **未实现**：语义缓存（F-EXT-01）、内联内容合规过滤（F-EXT-02）、LDAP、公网注册/支付、第三方应用市场——均属于 PRD 明确延后范围或 P1/P2。
 7. **Metering 口径**：按上游返回 usage 结算，不包含缓存折扣、Batch API 等特殊计费；模型价格需管理员按采购合同维护。
 8. **性能数据**为单机 Mock 压测，不代表多地域真实上游 SLA；生产验收需按 PRD 的 Locust/JMeter 场景在目标环境复测。
+9. **背压与容量保护**采用「服务级最大并发直接 503 + Body/响应/SSE 行大小上限」，未实现请求排队、CPU 占用率自动降级与上游连接预热；生产环境建议在反向代理层增加排队/限速与多副本。
+10. **优雅停机**最多等待 5 秒在途请求，超过后强制关闭长连接；超长 SSE 会话在滚动升级时可能被中断。
 
 ### 后续演进建议
 

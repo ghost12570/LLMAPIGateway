@@ -1158,7 +1158,7 @@ function logDetailHtml(log) {
   return `<dl class="kv">${rows.map(([k, v]) => `<dt>${h(k)}</dt><dd>${v}</dd>`).join('')}</dl>
     ${log.error_message ? `<div class="divider"></div><div class="notice danger">${ui.icon('alert', 16)}<div><b>${h(log.error_type || '错误')} · ${h(log.error_code || '')}</b><div class="mt-8 mono text-xs" style="white-space:pre-wrap">${h(log.error_message)}</div></div></div>` : ''}
     <div class="divider"></div>
-    <div class="text-xs muted-2">${ui.icon('shield', 12)} 网关默认仅存储元数据，不保存 Prompt 与生成内容。</div>`;
+    <div class="text-xs muted-2">${ui.icon('shield', 12)} 网关默认仅存储元数据与截断的错误摘要，不保存完整 Prompt / 生成内容。</div>`;
 }
 
 function openLogDrawer(log) {

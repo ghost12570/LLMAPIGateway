@@ -321,18 +321,28 @@ export function openDrawer({ title, subtitle = '', body = '', footer = '', onMou
 export function confirmDialog({ title, message, confirmText = '确认', cancelText = '取消', danger = false }) {
   return new Promise((resolve) => {
     let settled = false;
+    let observer = null;
+    let finish = null;
+    const settle = (value) => {
+      if (settled) return;
+      settled = true;
+      observer?.disconnect();
+      finish?.();
+      resolve(value);
+    };
     const { close } = openModal({
       title,
       size: 'narrow',
       body: `<div class="text-sm" style="color:var(--muted);line-height:1.7">${escapeHtml(message)}</div>`,
       footer: `<button class="btn" data-cancel>${escapeHtml(cancelText)}</button><button class="btn ${danger ? 'danger' : 'primary'}" data-confirm>${escapeHtml(confirmText)}</button>`,
       onMount(el, closeFn) {
-        el.querySelector('[data-cancel]').addEventListener('click', () => { closeFn(); resolve(false); settled = true; });
-        el.querySelector('[data-confirm]').addEventListener('click', () => { closeFn(); resolve(true); settled = true; });
+        finish = closeFn;
+        el.querySelector('[data-cancel]').addEventListener('click', () => settle(false));
+        el.querySelector('[data-confirm]').addEventListener('click', () => settle(true));
       },
     });
-    const observer = new MutationObserver(() => {
-      if (!document.body.contains(close.el) && !settled) { settled = true; resolve(false); observer.disconnect(); }
+    observer = new MutationObserver(() => {
+      if (!document.body.contains(close.el)) settle(false);
     });
     observer.observe(document.getElementById('modal-root'), { childList: true });
   });
